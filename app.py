@@ -6,6 +6,7 @@ from flask import Flask, request, Response
 import json
 import requests
 import math
+import hashlib
 from redis import Redis, RedisError
 import os
 import socket
@@ -138,6 +139,20 @@ def fib(num):
         "output" : fibli
         }
     return Response(json.dumps(varfib)), 200     
+
+
+
+@app.route('/md5/<string>', methods=['GET'])
+def md5Checksum(string):
+    m = hashlib.md5()
+    m.update(string.encode('utf-8'))
     
+    varm = {
+        "input" : string,
+        "output" : m.hexdigest()
+        }
+    return Response(json.dumps(varm)), 200     
+
+print('The MD5 checksum of text.txt is', md5Checksum('filename'))
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
