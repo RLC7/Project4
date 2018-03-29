@@ -6,6 +6,10 @@ from flask import Flask, request, Response
 import json
 import requests
 import math
+from redis import Redis, RedisError
+import os
+import socket
+redis = Redis(host="redis", db=0, socket_connect_timeout=2, socket_timeout=2)
 app = Flask(__name__)
 
 # instantiate Slack client
@@ -47,6 +51,14 @@ def inbound(string):
             }        
     return Response(json.dumps(varst)), 200
 
+
+@app.route('/is-prime/<string>', methods=['GET'])
+def notprime(string):
+    nope = {
+        "error" : "Invalid input!"
+        }
+    return Response(json.dumps(nope)), 200  
+
 @app.route('/is-prime/<int:num>', methods=['GET'])
 def prime(num):
     if app.route('/is-prime/<int:num>', methods=['GET']):
@@ -80,13 +92,13 @@ def prime(num):
             "output" : res
             }
         return Response(json.dumps(varp)), 200
-    else:
-        nope = {
-            "error" : "Invalid input!"
-            }
-        return Response(json.dumps(nope)), 200    
-
-
+    
+@app.route('/factorial/<string>', methods=['GET'])
+def notfact(string):
+    nope = {
+        "error" : "Invalid input!"
+        }
+    return Response(json.dumps(nope)), 200  
 @app.route('/factorial/<int:num>', methods=['GET'])
 def factorial(num):
     n = num
