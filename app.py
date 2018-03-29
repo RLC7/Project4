@@ -107,7 +107,37 @@ def factorial(num):
         "input" : num,
         "output" : f
         }
-    return Response(json.dumps(varf)), 200    
+    return Response(json.dumps(varf)), 200   
+@app.route('/fibonacci/<string>', methods=['GET'])
+def notfib(string):
+    nope = {
+        "error" : "Invalid input!"
+        }
+    return Response(json.dumps(nope)), 200 
+@app.route('/fibonacci/<int:num>', methods=['GET'])
+def fib(num):
+    Number = num
+    i=0
+    First_Value=0
+    Second_Value=1
+    fibli=[]
+    while(i<Number):
+        if(i<=1):
+            Next=i
+        else:
+            Next=First_Value + Second_Value
+            First_Value=Second_Value
+            Second_Value=Next
+        if Second_Value>Number:
+            break
+        fibli.append(Next)
+        i=i+1
+
+    varfib = {
+        "input" : Number,
+        "output" : fibli
+        }
+    return Response(json.dumps(varfib)), 200     
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
