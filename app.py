@@ -5,6 +5,7 @@ from slackclient import SlackClient
 from flask import Flask, request, Response
 import json
 import requests
+import math
 from redis import Redis, RedisError
 import os
 import socket
@@ -20,8 +21,8 @@ starterbot_id = None
 RTM_READ_DELAY = 1 # 1 second delay between reading from RTM
 EXAMPLE_COMMAND = "do"
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
-SLACK_DEV_TOKEN ='xoxp-231334506688-306981381971-336249794148-de735b35d625579380eb813a52e7284c'
-SLACK_WEBHOOK_TOKEN = 'm5ZeHmzWVoo9i64kMKonBO85' #Put your webhook token here
+SLACK_DEV_TOKEN ='xoxp-231334506688-306981381971-337376965489-e6109b10f71cf89a1f9ce3003bf351f2'
+SLACK_WEBHOOK_TOKEN = 'uzy2syrXOZeK01QOfbbKMDKD' #Put your webhook token here
 slack_client = SlackClient(SLACK_DEV_TOKEN)
 
 def send_message(channel_id, message):
@@ -35,7 +36,7 @@ def send_message(channel_id, message):
 
 @app.route('/slack-alert/<string>', methods=['GET'])
 def inbound(string):
-    channel_id='C9W508U91'
+    channel_id='C911SDMN0'
     message=string
     send_message(channel_id, message)
     if 200:
@@ -87,7 +88,18 @@ def prime(num):
         nope = {
             "error" : "Invalid input!"
             }
-        return Response(json.dumps(nope)), 200        
-            
+        return Response(json.dumps(nope)), 200    
+
+
+@app.route('/factorial/<int:num>', methods=['GET'])
+def factorial(num):
+    n = num
+    f = math.factorial(int(n))
+    varf = {
+        "input" : num,
+        "output" : f
+        }
+    return Response(json.dumps(varf)), 200    
+    
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
